@@ -1,0 +1,86 @@
+<ng4-loading-spinner [loadingText]="'Please wait...we are doing magic!'"> </ng4-loading-spinner>
+<form #form="ngForm" name="form" (submit)="onSubmit(form)" autocomplete="off">
+    <div class="form-row">
+    <div class="form-group col-md-12">
+     <select class="custom-select" [(ngModel)]="cruisetrip.CompanyId" name="CruiseLine" (change)="onCruiseLineChange($event.target.value)">
+        <option value="0" disabled selected>Select the Cruiseline</option>
+        <option *ngFor="let item of cruiselineList" [value]="item.id">{{item.title}}</option>
+      </select>
+    </div>
+
+    <div class="form-group col-md-12">
+      <select class="custom-select" [(ngModel)]="cruisetrip.ShipId" name="Ship" (change)="onShipChange($event.target.value)">
+        <option value="0" disabled selected>Select the Ship</option>
+        <option *ngFor="let item of shipList" [value]="item.id">{{item.title}}</option>
+      </select>
+    </div>
+
+    <div class="form-group col-md-12">
+        <select class="custom-select" [(ngModel)]="cruisetrip.CabinTypeId" name="CabinCategory">
+          <option value="0" disabled selected>Select the Cabin Category</option>
+          <option *ngFor="let item of cabinCategoryList" [value]="item.id">{{item.title}}</option>
+        </select>
+      </div>
+
+    
+      <div class="form-group col-md-12">
+    <table> 
+        <thead>
+          Route
+        </thead>
+        <tbody>
+          <tr *ngFor="let route of cruisetrip.Routes;let index = index;">
+            <td>
+                <div class="form-group col-md-6">
+                  <label>Day</label>
+                    <input type="number" name="day{{index}}" [(ngModel)]="route.Day" class="form-control" >                   
+                </div>
+            </td>
+            <td>
+                <div class="form-group col-md-12">
+                    <label>Port</label>
+                    <section  class="col-sm-12">
+                        <div class="search-results style-3">
+                          <input name="port{{index}}" type="text" placeholder="Type a Port"
+                            ngxTypeahead class="col-sm-12 form-control"
+                            [taList]="staticList" 
+                            [(ngModel)]="route.Port"
+                            (taSelected)="handleStaticResultSelected($event, route)">
+                        </div>
+                      </section>
+                                    
+                </div>
+            </td>            
+            <td>
+              <button type="button"  (click)="onRemoveRow(index)">-</button>
+            </td>
+          </tr>
+        </tbody>
+        
+      
+            <button type="button" (click)="onAddRow()" >+</button>
+         
+      </table>
+    </div>
+      <div class="form-group col-md-12">
+      <input type="text"
+            class="form-control"
+            [minDate]="minDate"
+            [maxDate]="maxDate"
+            #dp="bsDatepicker"
+            bsDatepicker [(bsValue)]="cruisetrip.DapartureDate">
+          </div>
+          <div class="form-group col-md-12">
+              <input
+              type="checkbox"
+              [(ngModel)]="cruisetrip.IsFlightIncluded"
+              [ngModelOptions]="{standalone: true}"/> 
+              <label> Flight Included</label>
+            </div>
+          </div>
+          <div class="text-right">
+          <button type="button" (click)="Create()" >Create</button>
+        </div>
+</form>
+
+<span>{{reponse| json}}</span>
